@@ -6,15 +6,9 @@
 
 FROM eclipse-temurin:17-jdk-alpine AS build
 
-# Définir le répertoire de travail
-
 WORKDIR /app
 
-# Copier tous les fichiers du projet
-
 COPY . .
-
-# Rendre le wrapper Maven exécutable
 
 RUN chmod +x mvnw
 
@@ -30,18 +24,12 @@ RUN ./mvnw clean package -DskipTests
 
 FROM eclipse-temurin:17-jdk-alpine
 
-# Définir le répertoire de travail
-
 WORKDIR /app
 
-# Copier le jar depuis l'étape de build
+# Copier le jar correct depuis l'étape de build
 
-COPY --from=build /app/target/gateway-0.0.1-SNAPSHOT.jar app.jar
-
-# Exposer le port utilisé par l'application
+COPY --from=build /app/target/gatway-0.0.1-SNAPSHOT.jar app.jar
 
 EXPOSE 8085
-
-# Commande pour lancer l'application
 
 CMD ["java", "-jar", "app.jar"]
