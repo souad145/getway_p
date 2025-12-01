@@ -1,18 +1,20 @@
-
-# Utiliser Java 17
+# Utiliser une image Java 17
 FROM eclipse-temurin:17-jdk-alpine
 
-# Créer le dossier de travail
+# Créer un dossier pour l'application
 WORKDIR /app
 
-# Copier tout le contenu du sous-dossier
+# Copier tous les fichiers du projet
 COPY . .
 
-# Construire le projet avec Maven Wrapper
+# Rendre le wrapper Maven exécutable
+RUN chmod +x mvnw
+
+# Construire le projet sans tests
 RUN ./mvnw clean package -DskipTests
 
-# Exposer le port que tu utilises (8085)
+# Exposer le port que ton app utilise
 EXPOSE 8085
 
-# Commande pour démarrer ton Spring Boot Gateway
+# Lancer l'application
 CMD ["java", "-jar", "target/gateway-service-0.0.1-SNAPSHOT.jar"]
