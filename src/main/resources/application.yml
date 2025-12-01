@@ -1,0 +1,26 @@
+server:
+  port: ${PORT:8085}   # Render fournira le port
+
+spring:
+  application:
+    name: gateway-service
+
+  main:
+    web-application-type: reactive
+
+  cloud:
+    gateway:
+      routes:
+        - id: student-service
+          uri: https://foilable-gummiest-kaylen.ngrok-free.dev   # Student local via ngrok
+          predicates:
+            - Path=/api/students/**
+          filters:
+            - RewritePath=/api/students/(?<remaining>.*), /${remaining}
+
+        - id: course-service
+          uri: https://courses-1-w2rz.onrender.com    # Courses sur Render
+          predicates:
+            - Path=/api/courses/**
+          filters:
+            - RewritePath=/api/courses/(?<remaining>.*), /${remaining}
